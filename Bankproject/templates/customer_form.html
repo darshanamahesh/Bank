@@ -1,0 +1,70 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+    Login Page
+{% endblock %}
+{% block title %}
+ MyBank
+
+{% endblock %}
+
+{% block content %}
+
+<h1 align = "center" style="color: white">
+    <em>Welcome {{user.username}} !!<br></em>
+    <i><small>Add Customer Details</small></i>
+</h1>
+    <form method="post" align = "center" style="color: white">
+        {% csrf_token %}
+
+        <input type="text" id="name" name="name" placeholder="NAME"  required ><br>
+
+        <input type="date" id="dob" name="dob" placeholder="Date of Birth" style="width: 203px;" required><br>
+         <input type="text" id="age" name="age" placeholder="Age" required><br>
+<label>Gender</label><select id="gender" name="gender" style="width: 150px;">
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+    <option value="other">Other</option>
+</select>
+<br>
+          <input type="text" id="phone_number" name="phone_number" placeholder="Mobile" required><br>
+          <input type="email" id="mail_id" name="mail_id" placeholder="e-mail" required><br>
+<!--        <input type="text" id="account_type" name="account_type" placeholder="Account Type" required><br>-->
+<label>Account Type</label>
+        <select id="account_type" name="account_type" style="width: 100px;">
+    <option value="male">Savings Account</option>
+    <option value="female">Current Account</option>
+    <option value="other">Fixed Account</option>
+</select><br>
+
+        <input type="text" name="address" placeholder="Address"><br>
+
+        <!-- Add other form fields for age, gender, phone_number, mail_id, address, account_type -->
+
+<label>District</label>
+        <select id="district" name="district" style="width: 150px;" required>
+            {% for district in districts %}
+                <option name="district" value="{{ district.id }}">{{ district.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="branch">Branch:</label>
+        <select id="branch" name="branch" style="width: 150px;" required>
+
+            {% for branch in branches %}
+                <option value="{{ branch.id }}">{{ branch.name }}</option>
+            {% endfor %}
+
+        </select><br>
+
+        <label for="materials_provide" style="width: 200px;">Materials Provide:</label><br>
+        {% for material in materials %}
+            <input type="checkbox" id="material_{{ material.id }}" name="materials_provide" value="{{ material.id }}">
+            <label for="material_{{ material.id }}" style="width: 150px;">{{ material.name }}</label><br>
+        {% endfor %}
+
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
