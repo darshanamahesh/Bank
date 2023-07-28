@@ -48,20 +48,21 @@ def register(request):
 
 def customer_form(request):
     if request.method == 'POST':
-        name = request.POST['name']
-        dob = request.POST['dob']
-        age = request.POST['age']
-        gender = request.POST['gender']
-        phone_number = request.POST['phone_number']
-        mail_id = request.POST['mail_id']
-        address = request.POST['address']
-        district_id = request.POST['district']
-        print("district",district_id)
-        branch_id = request.POST['branch']
-        account_type = request.POST['account_type']
+        name = request.POST.get('name')
+        dob = request.POST.get('dob')
+        age = request.POST.get('age')
+        gender = request.POST.get('gender')
+        phone_number = request.POST.get('phone_number')
+        mail_id = request.POST.get('mail_id')
+        address = request.POST.get('address')
+        district_id = request.POST.get('district')
+        print("district", district_id)
+        branch_id = request.POST.get('branch')
+        account_type = request.POST.get('account_type')
         materials_provide_ids = request.POST.getlist('materials_provide')
 
         district = District.objects.get(pk=district_id)
+        print("district", district)
         branch = Branch.objects.get(pk=branch_id)
         materials_provide = Material.objects.filter(pk__in=materials_provide_ids)
 
@@ -82,10 +83,19 @@ def customer_form(request):
         return redirect('application_accepted')
 
     districts = District.objects.all()
-    district_id = request.POST.get('district')
     branches = Branch.objects.all()
+    print("district", districts)
+    print("branch", branches)
 
+    if request.method == 'POST':
+        district_id = request.POST.get('district')
+        print("id", district_id)
+        if district_id:
+            branches = Branch.objects.filter(district_id=district_id)
+
+    #materials = Material.objects.all()
     materials = Material.objects.all()
+
 
     return render(request, 'customer_form.html', {'districts': districts, 'branches': branches, 'materials': materials})
 
@@ -97,7 +107,6 @@ def customer_form(request):
     # else:
     #     form = CustomerForm()
     # return render(request, 'customer_form.html', {'form': form})
-
 
 def application_accepted(request):
     return render(request, 'application_accepted.html')
